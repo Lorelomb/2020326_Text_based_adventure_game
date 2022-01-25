@@ -1,17 +1,23 @@
 import sys
 import time
-
-player = {"weapon": None, "health": 50, "name": None}
-weapons = {"Fire Staff": (3, 10), "Healing Staff": (4, 10), "Battle Axe": (3, 11), "Shadow Daggers": (5, 1),
-           "DwarvenBow": (3, 17)}
-# enemies = {"Goblin": ,"Caster Goblin":m "Archer Goblin"}
-inventory = []
+from random import randint
 # game_on = True
+
+player = {"weapon": (3, 20), "health": 50, "name": None}
+Goblin = {"attack": (5, 18), "health": (25),"name": "Goblin" }
+Caster_Goblin = {"attack": (5, 20), "health": (15), "name": "Goblin Shaman"}
+Archer_Goblin = {"attack": (5, 13), "health": (20),"name": "Goblin Hunter" }
+Hulk_Goblin = {"attack": (5, 25), "health": (35), "name": "Giant Goblin"}
+King_Goblin = {"attack": (6, 35), "health": (41),"name": "Goblin Leader" }
+weapons = {"Fire Staff": (3, 20), "Healing Staff": (3, 10), "Battle Axe": (3, 18), "Shadow Daggers": (3, 16),
+           "DwarvenBow": (3, 13)}
+potions = {"powerful potion", "medium potion", "light potion", "higher potion"}
+inventory = []
+healed = 1
 a = 2
 b = 0.2
 c = 0.0150
 d = 0.150
-
 
 def intro():
     print("\nHealth = ", player["health"])
@@ -67,25 +73,25 @@ def class_choice():
     if class_option == "mage" or class_option == "Mage":
         mage = input("Are you sure? :")
         if mage == "yes" or mage == "Y" or mage == "y" or mage == "YES":
-            player["weapon"] = "Fire Staff"
+            player["damage"] = "Fire Staff"
             print()
             print('"I think I am a mage"'"- You "'')
             time.sleep(a)
-            print("~ You have acquired a", player["weapon"], "~")
+            print("~ You have acquired a", player["damage"], "~")
         elif mage == "no" or "N" or mage == "n" or mage == "NO":
             class_choice()
-        elif mage != "yes" or mage == "Y" or mage == "y" or mage == "YES"\
+        elif mage != "yes" or mage == "Y" or mage == "y" or mage == "YES" \
                 or mage == "no" or "N" or mage == "n" or mage == "NO":
             class_choice()
 
     elif class_option == "cleric" or class_option == "Cleric":
         cleric = input("Are you sure? :")
         if cleric == "yes" or cleric == "Y" or cleric == "y" or cleric == "YES":
-            player["weapon"] = "Healing Staff"
+            player["damage"] = "Healing Staff"
             print()
             print('"I think I am a cleric"'"- You "'')
             time.sleep(a)
-            print("~ You have acquired a", player["weapon"], "~")
+            print("~ You have acquired a", player["damage"], "~")
         elif cleric == "no" or cleric == "N" or cleric == "n" or cleric == "NO":
             class_choice()
         elif cleric != "yes" or cleric == "Y" or cleric == "y" or cleric == "YES" \
@@ -95,11 +101,11 @@ def class_choice():
     elif class_option == "rogue" or class_option == "Rogue":
         rogue = input("Are you sure? :")
         if rogue == "yes" or rogue == "Y" or rogue == "y" or rogue == "YES":
-            player["weapon"] = "Shadow Daggers"
+            player["damage"] = "Shadow Daggers"
             print()
             print('"I think I am a rogue"'"- You "'')
             time.sleep(a)
-            print("~ You have acquired a", player["weapon"], "~")
+            print("~ You have acquired a", player["damage"], "~")
         elif rogue == "no" or rogue == "N" or rogue == "n" or rogue == "NO":
             class_choice()
         elif rogue != "yes" or rogue == "Y" or rogue == "y" or rogue == "YES" or rogue == \
@@ -109,14 +115,14 @@ def class_choice():
     elif class_option == "warrior" or class_option == "Warrior":
         warrior = input("Are you sure? :")
         if warrior == "yes" or warrior == "Y" or warrior == "y" or warrior == "YES":
-            player["weapon"] = "Battle Axe"
+            player["damage"] = "Battle Axe"
             print()
             print('"I think I am a warrior"'"- You "'')
             time.sleep(a)
-            print("~ You have acquired a", player["weapon"], "~")
+            print("~ You have acquired a", player["damage"], "~")
         elif warrior == "no" or warrior == "N" or warrior == "n" or warrior == "NO":
             class_choice()
-        elif warrior != "yes" or warrior == "Y" or warrior == "y" or warrior == "YES"\
+        elif warrior != "yes" or warrior == "Y" or warrior == "y" or warrior == "YES" \
                 or "no" or warrior == "N" or warrior == "n" or warrior == "NO":
             class_choice()
 
@@ -124,11 +130,11 @@ def class_choice():
         print()
         archer = input("Are you sure? :")
         if archer == "yes" or archer == "Y" or archer == "y" or archer == "YES":
-            player["weapon"] = "DwarvenBow"
+            player["damage"] = "DwarvenBow"
             print()
             print('"I think I am a archer"'"- You "'')
             time.sleep(a)
-            print("~ You have acquired a", player["weapon"], "~")
+            print("~ You have acquired a", player["damage"], "~")
         elif archer == "no" or archer == "N" or archer == "n" or archer == "NO":
             class_choice()
         elif archer != "no" or archer == "N" or archer == "n" or archer == "NO" or \
@@ -208,14 +214,15 @@ def part1_2_choice():
     part1_2choice = input("~What would you like to do ? {inventory, talk or walk forward} ~:")
     if part1_2choice == "inventory":
         inventory_access()
+    elif part1_2choice == "talk" and player["health"] == 100:
+        print("------------------------------------------------------------------")
+        part2_1()
     elif part1_2choice == "talk":
         part1_2_talk()
     elif part1_2choice == "walk forward":
         part1_2_walk_forward()
     elif part1_2choice != "inventory" or "talk" or "walk forward":
         part1_2_choice()
-    elif part1_2choice == "talk" and player["health"] == 100:
-        part2_1()
 
 
 def part1_2_talk():
@@ -232,7 +239,7 @@ def part1_2_talk():
 def part2_1():
     print()
     print()
-    p1 = '"Great you are back in shape, we need to hurry up the others need our help lad!"''" - Thorfin, the dwarf '''
+    p1 = '"Great you are back in shape, we need to hurry up the others need our help lad!"'' - Thorfin, the dwarf '''
     for character in p1:
         sys.stdout.write(character)
         sys.stdout.flush()
@@ -245,7 +252,21 @@ def part2_1():
     print("- There is blood on the floor, as you approach the shadow succumbed in the wall you hear Thorfin shouting-")
     print()
     time.sleep(a)
-    p2 = '"'
+    p2 = '" To your weapon lad!, prepare yourself they have taken out one of us ,' \
+         ' but with you back in a one piece lad we will be able to stop the horde of goblins"''- Thorfin, the dwarf '''
+    for character in p2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        sys.stdout.flush()
+        time.sleep(c)
+    print()
+    commands(player, Goblin)
+    commands(player, Caster_Goblin)
+    commands(player, Archer_Goblin)
+    commands(player, Hulk_Goblin)
+    commands(player, King_Goblin)
+
+
 
 
 def part1_2_walk_forward():
@@ -263,6 +284,7 @@ def part1_2_walk_forward():
 
 
 def inventory_access():
+    global healed
     print()
     print("Inventory =", inventory)
     time.sleep(b)
@@ -271,18 +293,36 @@ def inventory_access():
         if inventory_ac == "powerful potion" and "powerful potion" in inventory:
             player["health"] += 50
             print("You used a [powerful potion], you have healed 50 life points, Health = ", player["health"], "~")
+            healed = 2
+            if healed == 2:
+                print()
+                part1_2_choice()
+                healed = 1
 
-        else:
+
+def reduce_health(attacker, defender):
+    dmg = randint(attacker["damage"][0], attacker["damage"][1])
+    defender["health"] = defender["health"] - dmg
+    if defender["health"] <= 0:
+        print('{} has been slain'.format(defender["name"]))
+    else:
+        print('{} takes {} damage!'.format(defender["name"], dmg))
+
+
+def commands(hero, enemy):
+    while True:
+        print('--------------------------')
+        cmd = input("Do you want to attack ? [yes/no] or [inventory] ?:").lower()
+        if "yes" in cmd:
+            print("{} attacks the monster".format(hero["name"]))
+            reduce_health(hero, enemy)
+        elif "no" in cmd:
+            print("{} takes the chance to attack".format(enemy["name"]))
+            reduce_health(enemy, hero)
+        elif "inventory" in cmd:
             inventory_access()
-
-
-def reduce_health():
-    healthcheck = int(player["health"])
-    enemyattack = int("enemy_damage")
-    player["health"] = healthcheck - enemyattack
-    print(player["health"])
-    if player["health"] <= 0:
-        game_over()
+        else:
+            pass
 
 
 def game_start():
@@ -298,12 +338,13 @@ def game_start():
     elif startGame == "yes" or startGame == "Y" or startGame == "y" or startGame == "YES":
         print("------------------------------------------------------------------")
         intro()
-    elif startGame != "yes" or startGame == "Y" or startGame == "y" or startGame == "YES"\
+    elif startGame != "yes" or startGame == "Y" or startGame == "y" or startGame == "YES" \
             or startGame == "no" or startGame == "N" or startGame == "n" or startGame == "NO":
         game_start()
 
 
 def game_over():
+    print("------------------------------------------------------------------")
     print()
     print("Maybe next time then!")
     print()
